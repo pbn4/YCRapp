@@ -29,4 +29,4 @@ api.add_resource(Company, '/companies/<int:company_id>')
 api.add_resource(Companies, '/companies')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
