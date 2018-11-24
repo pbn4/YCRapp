@@ -1,0 +1,110 @@
+openapi: 3.0.1
+info:
+  description: YCR API
+  title: YCR API
+  version: 1.0.0
+servers:
+- url: ///api
+paths:
+  /companies:
+    get:
+      description: Returns a list containing all companies. The list supports paging.
+      operationId: companies_get
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Companies'
+          description: A list of Company
+        500:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: An unexpected error occured.
+      summary: Gets some companies
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    post:
+      description: Adds a new person to the persons list.
+      operationId: companies_post
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Company'
+        description: The company to create.
+        required: false
+      responses:
+        204:
+          content: {}
+          description: Company succesfully created.
+        400:
+          content: {}
+          description: Company couldn't have been created.
+        500:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: An unexpected error occured.
+      summary: Creates a company
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /companies/{id}:
+    get:
+      description: Returns a single company for its id.
+      operationId: companies_id_get
+      parameters:
+      - description: The company's id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: number
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: A Company
+        404:
+          content: {}
+          description: The Company does not exists.
+        500:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: An unexpected error occured.
+      summary: Gets a company
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  responses:
+    Standard500ErrorResponse:
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: An unexpected error occured.
+  schemas:
+    Company:
+      example:
+        name: name
+      properties:
+        name:
+          type: string
+      required:
+      - name
+      type: object
+    Companies:
+      items:
+        $ref: '#/components/schemas/Company'
+      type: array
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      type: object
