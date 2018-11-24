@@ -27,6 +27,8 @@ def filter_krs_obj(krs):
 
     return out_objs
 
+filtered_krs_obj = filter_krs_obj(krs_json)
+
 def companies_get():  # noqa: E501
     """Gets some companies
 
@@ -35,7 +37,7 @@ def companies_get():  # noqa: E501
 
     :rtype: Companies
     """
-    return filter_krs_obj(krs_json)
+    return filtered_krs_obj
 
 
 def companies_id_get(id):  # noqa: E501
@@ -48,7 +50,10 @@ def companies_id_get(id):  # noqa: E501
 
     :rtype: Company
     """
-    return 'do some magic!'
+    for obj in filter_krs_obj:
+        if obj['id'] == id:
+            return obj
+    return 'Found', 200
 
 
 def companies_post(company=None):  # noqa: E501
