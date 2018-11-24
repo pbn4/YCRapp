@@ -29,7 +29,7 @@ class Search(Resource):
         nl = NormalizedLevenshtein()
         allNames = [(nl.distance(company_name.upper(), a['nazwa']), a['id'], a['nazwa']) for a in companies_arr]
         best_result = sorted(allNames,reverse=True)[-1]
-        if best_result[0] > 0.1: #result is bad
+        if best_result[0] > 0.8: #result is bad
             return {'Error':'Company not found!'}
         else:
             return {'Closest Match':best_result}
