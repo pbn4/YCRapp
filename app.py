@@ -4,7 +4,6 @@ from flask_restful import Resource, Api
 app = Flask(__name__)
 api = Api(app)
 
-import json
 from krs import get_krs_obj
 
 companies_arr = get_krs_obj()
