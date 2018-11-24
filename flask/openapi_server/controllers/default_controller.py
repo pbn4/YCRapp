@@ -6,6 +6,12 @@ from openapi_server.models.company import Company  # noqa: E501
 from openapi_server.models.error import Error  # noqa: E501
 from openapi_server import util
 
+import json
+
+with open('krs.json', 'r') as f:
+    krs_json = json.loads(f.read())
+
+krs = krs_json['Dataobject']
 
 def companies_get():  # noqa: E501
     """Gets some companies
@@ -15,7 +21,7 @@ def companies_get():  # noqa: E501
 
     :rtype: Companies
     """
-    return 'do some magic!'
+    return krs
 
 
 def companies_id_get(id):  # noqa: E501
