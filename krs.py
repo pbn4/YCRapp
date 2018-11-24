@@ -1,4 +1,6 @@
-def get_krs_obj(krs):
+import json
+
+def get_krs_obj():
     with open('krs.json', 'r') as f:
         krs_json = json.loads(f.read())
     out_objs = []
