@@ -2,6 +2,8 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from similarity.normalized_levenshtein import NormalizedLevenshtein
 from flask_cors import CORS
+from fuzzywuzzy import fuzz
+from operator import itemgetter
 
 app = Flask(__name__)
 CORS(app)
@@ -26,13 +28,12 @@ class Companies(Resource):
 class Search(Resource):
 
     def get(self, company_name):
-        nl = NormalizedLevenshtein()
-        allNames = [(nl.distance(company_name.upper(), a['nazwa']), a['id'], a['nazwa']) for a in companies_arr]
-        best_result = sorted(allNames,reverse=True)[-1]
-        if best_result[0] > 0.8: #result is bad
-            return {'Error':'Company not found!'}
-        else:
-            return {'Closest Match':best_result}
+        ratios = []
+        for obj in companies_arr:
+            ratio = fuzz.token_set_ratio(company_name, obj['nazwa'])
+            ratios.append((obj, ratio))
+        sorted_ratios = sorted(ratios, key=itemgetter(1), reverse=True)
+        return [obj for obj, ratio in sorted_ratios[:5]]
             
 
 api.add_resource(Company, '/companies/<int:company_id>')
